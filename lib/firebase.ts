@@ -17,5 +17,7 @@ if (!firebase.apps.length) {
 }
 
 export const auth = firebase.auth();
+export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+export const emailAuthProvider = new firebase.auth.EmailAuthProvider();
 export const firestore = firebase.firestore();
 export const storage = firebase.storage();

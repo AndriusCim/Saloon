@@ -1,7 +1,11 @@
+import { useContext } from 'react';
 import Head from 'next/head';
 import toast from 'react-hot-toast';
+import { UserContext } from '../lib/context';
 
 const Home: React.FC = () => {
+  const { user } = useContext(UserContext);
+
   return (
     <div>
       <Head>
