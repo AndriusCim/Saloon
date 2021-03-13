@@ -1,28 +1,22 @@
 import { Toaster } from 'react-hot-toast';
-import Navbar from '../components/Navbar';
 import { UserContext } from '../lib/context';
 import { useUserData } from '../lib/hooks';
+import Navbar from '../components/Navbar';
 
-import 'antd/dist/antd.css';
+import '../styles/globals.css';
 import 'tailwindcss/tailwind.css';
-import LoginForm from '../components/LoginForm';
+import AuthCheck from '../components/AuthCheck';
 
 const MyApp = ({ Component, pageProps }) => {
   const userData = useUserData();
 
-  if(userData.loading) {
-    return <h1>LOPADO</h1>
-  }
-
-  if (!userData && userData.user) {
-    return <LoginForm />;
-  }
-
   return (
     <UserContext.Provider value={userData}>
-      {userData.user && <Navbar user={userData.user} username={userData.username} />}
-      <Component {...pageProps} />
-      <Toaster />
+      <AuthCheck>
+          <Navbar />
+          <Component {...pageProps} />
+          <Toaster />
+      </AuthCheck>
     </UserContext.Provider>
   );
 };

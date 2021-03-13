@@ -1,21 +1,75 @@
-import { useContext } from 'react';
-import Head from 'next/head';
-import toast from 'react-hot-toast';
-import { UserContext } from '../lib/context';
+import PostFeed from '../components/PostFeed';
+import Metatags from '../components/Metatags';
+import Loader from '../components/Loader';
+import { firestore, fromMillis } from '../lib/firebase';
 
-const Home: React.FC = () => {
-  const { user } = useContext(UserContext);
+import { useState } from 'react';
+import { postToJSON } from '../api/posts';
+
+// Max post to query per page
+const LIMIT = 10;
+
+export async function getServerSideProps(context) {
+  const postsQuery = firestore
+    .collectionGroup('posts')
+    .where('published', '==', true)
+    .orderBy('createdAt', 'desc')
+    .limit(LIMIT);
+
+  const posts = (await postsQuery.get()).docs.map(postToJSON);
+
+  return {
+    props: { posts }, // will be passed to the page component as props
+  };
+}
+
+export default function Home(props) {
+  const [posts, setPosts] = useState(props.posts);
+  const [loading, setLoading] = useState(false);
+
+  const [postsEnd, setPostsEnd] = useState(false);
+
+  // Get next page in pagination query
+  const getMorePosts = async () => {
+    setLoading(true);
+    const last = posts[posts.length - 1];
+
+    const cursor = typeof last.createdAt === 'number' ? fromMillis(last.createdAt) : last.createdAt;
+
+    const query = firestore
+      .collectionGroup('posts')
+      .where('published', '==', true)
+      .orderBy('createdAt', 'desc')
+      .startAfter(cursor)
+      .limit(LIMIT);
+
+    const newPosts = (await query.get()).docs.map((doc) => doc.data());
+
+    setPosts(posts.concat(newPosts));
+    setLoading(false);
+
+    if (newPosts.length < LIMIT) {
+      setPostsEnd(true);
+    }
+  };
 
   return (
-    <div>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <button onClick={() => toast.success('hello toast!')}>Toast Me</button>
-      LABAS
-    </div>
-  );
-};
+    <main className="bg-gray-800">
+      <Metatags title="Home Page" description="Get the latest posts on our site" />
 
-export default Home;
+      <div className="card card-info">
+        <h2>💡 Next.js + Firebase - The Full Course</h2>
+        <p>Welcome! This app is built with Next.js and Firebase and is loosely inspired by Dev.to.</p>
+        <p>Sign up for an 👨‍🎤 account, ✍️ write posts, then 💞 heart content created by other users. All public content is server-rendered and search-engine optimized.</p>
+      </div>
+     
+      <PostFeed posts={posts} />
+
+      {!loading && !postsEnd && <button onClick={getMorePosts}>Load more</button>}
+
+      <Loader show={loading} />
+
+      {postsEnd && 'You have reached the end!'}
+    </main>
+  );
+}

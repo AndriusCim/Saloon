@@ -1,36 +1,14 @@
-import { auth, firestore } from '../lib/firebase';
+import { auth, firestore, UserInfo } from './firebase';
 import { useEffect, useState } from 'react';
-import { useAuthState, AuthStateHook } from 'react-firebase-hooks/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
-interface State {
-  loading: boolean;
-  errors: any | null;
-}
-
-export const useUserLogin = () => {
-  const [state, setState] = useState<State>({ loading: false, errors: null });
-
-  const login = async (email: string, password: string) => {
-    setState((prevState) => ({ ...prevState, loading: true }));
-    try {
-      await auth.signInWithEmailAndPassword(email, password);
-      setState((prevState) => ({ ...prevState, loading: false }));
-    } catch (error) {
-      setState({ loading: false, errors: error.message });
-    }
-  };
-
-  return {
-    ...state,
-    login
-  };
-};
-
-export const useUserData = () => {
-  const [user, loading] = useAuthState(auth);
+// Custom hook to read  auth record and user profile doc
+export function useUserData() {
+  const [user] = useAuthState(auth);
   const [username, setUsername] = useState(null);
 
   useEffect(() => {
+    // turn off realtime subscription
     let unsubscribe;
 
     if (user) {
@@ -45,5 +23,5 @@ export const useUserData = () => {
     return unsubscribe;
   }, [user]);
 
-  return { user, loading, username };
-};
+  return { user: user as UserInfo, username };
+}
