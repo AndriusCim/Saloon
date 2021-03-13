@@ -1,4 +1,3 @@
-import styles from '../../styles/Post.module.css';
 import PostContent from '../../components/PostContent';
 import HeartButton from '../../components/HeartButton';
 import AuthCheck from '../../components/AuthCheck';
@@ -66,7 +65,7 @@ const Game: React.FC<Props> = (props) => {
   const { user: currentUser } = useContext(UserContext);
 
   return (
-    <main className={styles.container}>
+    <main>
       <Metatags title={post.title} description={post.title} />
 
       <section>
