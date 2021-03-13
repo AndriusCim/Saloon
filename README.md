@@ -1,20 +1,16 @@
-## Next.js + Firebase - The Full Course
+## Saloon
 
-- [Live Demo](https://next.fireship.io/)
-- [Enroll in the Course](https://fireship.io/courses/react-next-firebase/)
+- [Live Demo](saloon.lt)
 
-Become an expert at React, Next.js, and Firebase by building a social blogging community from scratch. 
+Saloon.lt is next.js web app inspired by medium & dev.to, which allows user to create, comment and edit posts.
 
-Build a complex webapp inspired by sites Dev.to and Medium, featuring...
-
-- 👨‍🎤 Custom Firebase usernames
-- 📰 Bot-friendly content (SEO)
+- 👨‍🎤 Custom usernames
 - 🦾 Advanced SSR, SSG, and ISR techniques
 - 🔥 Firestore CRUD and data modeling
 - ⚛️ Reactive forms with react-hook-form
 - 📂 Image file uploads
 - 💞 Realtime hearts
-- 🚀 Security & Deployment
+- 🚀 Security & Deployment using Vercel
 
 
 
