@@ -1,5 +1,5 @@
-import { firestore, auth, increment, PostRef } from '../lib/firebase';
 import { useDocument } from 'react-firebase-hooks/firestore';
+import { firestore, auth, increment, PostRef } from '../lib/firebase';
 
 interface Props {
   postRef: PostRef;

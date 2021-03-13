@@ -1,6 +1,9 @@
+import { useContext } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
+
+import { Pane, Heading, Avatar, IconButton, MenuIcon, Popover, Menu } from 'evergreen-ui';
+
 import { UserContext } from '../lib/context';
 import { auth } from '../lib/firebase';
 
@@ -15,38 +18,44 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="font-sans flex flex-col text-center sm:flex-row sm:text-left sm:justify-between py-4 px-6 bg-white shadow sm:items-baseline w-full">
-      <div className="mb-2 sm:mb-0">
+    <Pane display="flex" borderBottom padding={16}>
+      <Pane flex={1} alignItems="center" display="flex">
         <Link href="/">
-          <button className="text-2xl no-underline text-grey-darkest hover:text-blue-dark">Home</button>
+          <Heading cursor="pointer" size={700}>
+            🍺
+          </Heading>
         </Link>
-      </div>
+      </Pane>
 
-      {username && (
-        <div>
-          <button className="text-lg no-underline text-grey-darkest hover:text-blue-dark ml-2">One</button>
-          <Link href="/admin">
-            <button className="text-lg no-underline text-grey-darkest hover:text-blue-dark ml-2">Write Posts</button>
-          </Link>
-          <button onClick={signOut} className="text-lg no-underline text-grey-darkest hover:text-blue-dark ml-2">
-            Sign Out
-          </button>
-          <Link href={`/${username}`}>
-            <button className="text-lg no-underline text-grey-darkest hover:text-blue-dark ml-2">
-              <img src={user?.photoURL || '/hacker.png'} style={{ width: 20 }} />
-            </button>
-          </Link>
-        </div>
-      )}
+      <Pane alignItems="center" display="flex" borderRight paddingRight={20}>
+        <Link href={`/${username}`}>
+          <Avatar cursor="pointer" isSolid hashValue={user.uid} name={username} size={40} />
+        </Link>
+      </Pane>
 
-      {!username && (
-        <li>
-          <Link href="/enter">
-            <button className="text-lg no-underline text-grey-darkest hover:text-blue-dark ml-2">Log in</button>
-          </Link>
-        </li>
-      )}
-    </nav>
+      <Pane alignItems="center" display="flex" paddingLeft={20}>
+        <Popover
+          position="bottom-right"
+          content={
+            <Menu>
+              <Menu.Group>
+                <Link href="/admin">
+                  <Menu.Item>Write post</Menu.Item>
+                </Link>
+              </Menu.Group>
+              <Menu.Divider />
+              <Menu.Group>
+                <Menu.Item onClick={() => signOut()} intent="danger">
+                  Sign out
+                </Menu.Item>
+              </Menu.Group>
+            </Menu>
+          }
+        >
+          <IconButton appearance="minimal" icon={MenuIcon} iconSize={18} />
+        </Popover>
+      </Pane>
+    </Pane>
   );
 };
 

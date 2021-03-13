@@ -1,12 +1,12 @@
-import Link from 'next/link';
 import React, { useContext } from 'react';
+
+import Enter from '../pages/enter';
 import { UserContext } from '../lib/context';
-import Enter from '../pages/enter'
+
 interface Props {
   fallback?: React.ReactNode;
 }
 
-// Component's children only shown to logged-in users
 const AuthCheck: React.FC<Props> = ({ fallback, children }) => {
   const { username } = useContext(UserContext);
 

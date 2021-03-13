@@ -3,8 +3,6 @@ import { UserContext } from '../lib/context';
 import { useUserData } from '../lib/hooks';
 import Navbar from '../components/Navbar';
 
-import '../styles/globals.css';
-import 'tailwindcss/tailwind.css';
 import AuthCheck from '../components/AuthCheck';
 
 const MyApp = ({ Component, pageProps }) => {
