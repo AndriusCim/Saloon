@@ -10,7 +10,6 @@ import PostFeed from '../../components/PostFeed';
 import { UserContext } from '../../lib/context';
 import { firestore, auth, serverTimestamp } from '../../lib/firebase';
 
-
 const PostList = () => {
   const ref = firestore.collection('users').doc(auth.currentUser.uid).collection('posts');
   const query = ref.orderBy('createdAt');

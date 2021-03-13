@@ -11,8 +11,6 @@ import { firestore, auth, serverTimestamp, PostRef } from '../../lib/firebase';
 import ImageUploader from '../../components/ImageUploader';
 import AuthCheck from '../../components/AuthCheck';
 
-import styles from '../../styles/Admin.module.css';
-
 const PostManager = () => {
   const [preview, setPreview] = useState(false);
 
@@ -27,7 +25,7 @@ const PostManager = () => {
   const [post] = useDocumentDataOnce<Post>(postRef);
 
   return (
-    <main className={styles.container}>
+    <main>
       {post && (
         <>
           <section>
@@ -76,7 +74,7 @@ function PostForm({ defaultValues, postRef, preview }) {
         </div>
       )}
 
-      <div className={preview ? styles.hidden : styles.controls}>
+      <div>
         <ImageUploader />
 
         <textarea
@@ -91,7 +89,7 @@ function PostForm({ defaultValues, postRef, preview }) {
         {errors.content && <p className="text-danger">{errors.content.message}</p>}
 
         <fieldset>
-          <input className={styles.checkbox} name="published" type="checkbox" ref={register} />
+          <input name="published" type="checkbox" ref={register} />
           <label>Published</label>
         </fieldset>
 
