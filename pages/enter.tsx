@@ -1,12 +1,13 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
+import Router from 'next/router';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import Router from 'next/router';
 
 import { Button, FormField, Heading, Pane, Spinner, toaster, TextInput } from 'evergreen-ui';
 
 import { auth, firestore } from '../lib/firebase';
 import { UserContext } from '../lib/context';
+import Metatags from '../components/Metatags';
 
 interface SignInValues {
   email: string;
@@ -56,6 +57,8 @@ const Enter: React.FC = () => {
 
   return (
     <>
+      <Metatags title="Login" description="Login page of saloon.lt" />
+
       {loading && (
         <Pane
           position="fixed"
