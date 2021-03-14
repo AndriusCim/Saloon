@@ -1,3 +1,4 @@
+import React from 'react';
 import Link from 'next/link';
 
 const Custom404: React.FC = () => {
@@ -12,7 +13,7 @@ const Custom404: React.FC = () => {
         allowFullScreen
       ></iframe>
       <Link href="/">
-        <button className="btn-blue">Go home</button>
+        <button>Go home</button>
       </Link>
     </main>
   );

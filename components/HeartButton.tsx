@@ -1,5 +1,7 @@
+import React from 'react';
+import { Button } from 'evergreen-ui';
 import { useDocument } from 'react-firebase-hooks/firestore';
-import { firestore, auth, increment, PostRef } from '../lib/firebase';
+import { firestore, auth, increment, PostRef } from '../api/firebase';
 
 interface Props {
   postRef: PostRef;
@@ -28,10 +30,11 @@ const Heart: React.FC<Props> = ({ postRef }) => {
     await batch.commit();
   };
 
-  return heartDoc?.exists ? (
-    <button onClick={removeHeart}>💔 Unheart</button>
-  ) : (
-    <button onClick={addHeart}>💗 Heart</button>
+  return (
+    <Button onClick={heartDoc?.exists ? removeHeart : addHeart} appearance="minimal" height={24}>
+      {' '}
+      {heartDoc?.exists ? '👍' : '👎'}{' '}
+    </Button>
   );
 };
 

@@ -1,19 +1,19 @@
-import { Toaster } from 'react-hot-toast';
-import { UserContext } from '../lib/context';
-import { useUserData } from '../lib/hooks';
-import Navbar from '../components/Navbar';
+import React from 'react';
+import { AppProps } from 'next/app';
 
+import { UserContext } from '../api/users';
+import { useUserData } from '../hooks/useUserData';
+import Navbar from '../components/Navbar';
 import AuthCheck from '../components/AuthCheck';
 
-const MyApp = ({ Component, pageProps }) => {
+const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   const userData = useUserData();
 
   return (
     <UserContext.Provider value={userData}>
       <AuthCheck>
-          <Navbar />
-          <Component {...pageProps} />
-          <Toaster />
+        <Navbar />
+        <Component {...pageProps} />
       </AuthCheck>
     </UserContext.Provider>
   );

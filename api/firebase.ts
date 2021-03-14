@@ -2,7 +2,6 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/storage';
-import { Post, PostDto } from '../api/posts';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyD3wCWsI9MSJ3V2bInG_k1yaWeQDax3Dmk',
@@ -19,6 +18,7 @@ if (!firebase.apps.length) {
 
 // Types
 export type PostRef = firebase.firestore.DocumentReference<firebase.firestore.DocumentData>;
+export type UserDoc = firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>;
 export type UserInfo = firebase.UserInfo;
 export type Document = firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>;
 export type Timestamp = firebase.firestore.Timestamp;
@@ -26,7 +26,6 @@ export type QuerySnapshot = firebase.firestore.QuerySnapshot;
 
 // Auth exports
 export const auth = firebase.auth();
-export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 
 // Firestore exports
 export const firestore = firebase.firestore();
@@ -38,12 +37,7 @@ export const increment = firebase.firestore.FieldValue.increment;
 export const storage = firebase.storage();
 export const STATE_CHANGED = firebase.storage.TaskEvent.STATE_CHANGED;
 
-/// Helper functions
-
-/**`
- * Gets a users/{uid} document with username
- * @param  {string} username
- */
+// Utils
 export const getUserWithUsername = async (username: string) => {
   const usersRef = firestore.collection('users');
   const query = usersRef.where('username', '==', username).limit(1);
@@ -51,8 +45,5 @@ export const getUserWithUsername = async (username: string) => {
   return userDoc;
 };
 
-/**`
- * Converts a firestore document to JSON
- * @param  {DocumentSnapshot} doc
- */
+
 

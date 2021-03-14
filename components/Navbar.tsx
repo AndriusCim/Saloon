@@ -1,17 +1,14 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
 import { Pane, Heading, Avatar, IconButton, MenuIcon, Popover, Menu } from 'evergreen-ui';
 
-import { UserContext } from '../lib/context';
-import { auth } from '../lib/firebase';
+import { auth } from '../api/firebase';
+import { UserContext } from '../api/users';
 
 const Navbar: React.FC = () => {
   const { user, username } = useContext(UserContext);
-
   const router = useRouter();
-
   const signOut = () => {
     auth.signOut();
     router.reload();

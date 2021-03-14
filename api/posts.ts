@@ -1,4 +1,4 @@
-import { UserInfo, Timestamp, Document } from '../lib/firebase';
+import { Timestamp, Document } from './firebase';
 
 export interface Post {
   content: string;
@@ -24,12 +24,7 @@ export interface PostDto {
   published: boolean;
 }
 
-export interface User {
-  user: UserInfo;
-  username: string | null;
-}
-
-export const postToJSON = (doc: Document): Post => {
+export const mapPostDtoToModel = (doc: Document): Post => {
   const data = doc.data() as PostDto;
   return {
     ...data,

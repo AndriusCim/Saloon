@@ -1,5 +1,6 @@
-import { Pane, Avatar, Text } from 'evergreen-ui';
+import React from 'react';
 import Link from 'next/link';
+import { Pane, Avatar, Text } from 'evergreen-ui';
 import { Post } from '../api/posts';
 
 interface Props {
@@ -13,7 +14,6 @@ interface PostItem {
 }
 
 const PostItem: React.FC<PostItem> = ({ post, admin = false }) => {
-
   return (
     <Pane padding={20} display="flex" border="muted" alignItems="center">
       <Avatar hashValue={post.uid} name=" " size={40} />
@@ -39,11 +39,11 @@ const PostItem: React.FC<PostItem> = ({ post, admin = false }) => {
         <>
           <Link href={`/admin/${post.slug}`}>
             <h3>
-              <button className="btn-blue">Edit</button>
+              <button>Edit</button>
             </h3>
           </Link>
 
-          {post.published ? <p className="text-success">Live</p> : <p className="text-danger">Unpublished</p>}
+          {post.published ? <p>Live</p> : <p>Unpublished</p>}
         </>
       )}
     </Pane>

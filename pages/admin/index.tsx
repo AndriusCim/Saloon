@@ -4,11 +4,11 @@ import { useCollection } from 'react-firebase-hooks/firestore';
 import kebabCase from 'lodash.kebabcase';
 import toast from 'react-hot-toast';
 
+import { firestore, auth, serverTimestamp } from '../../api/firebase';
 import { Post } from '../../api/posts';
+import { UserContext } from '../../api/users';
 import AuthCheck from '../../components/AuthCheck';
 import PostFeed from '../../components/PostFeed';
-import { UserContext } from '../../lib/context';
-import { firestore, auth, serverTimestamp } from '../../lib/firebase';
 
 const PostList = () => {
   const ref = firestore.collection('users').doc(auth.currentUser.uid).collection('posts');
@@ -55,15 +55,11 @@ const CreateNewPost = () => {
 
   return (
     <form onSubmit={createPost}>
-      <input
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="My Awesome Article!"
-      />
+      <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="My Awesome Article!" />
       <p>
         <strong>Slug:</strong> {slug}
       </p>
-      <button type="submit" disabled={!isValid} className="btn-green">
+      <button type="submit" disabled={!isValid}>
         Create New Post
       </button>
     </form>

@@ -1,6 +1,6 @@
+import React from 'react';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
-
 import { Post } from '../api/posts';
 
 interface Props {
@@ -8,16 +8,14 @@ interface Props {
 }
 
 const PostContent: React.FC<Props> = ({ post }) => {
-
   return (
-    <div className="card">
+    <div>
       <h1>{post?.title}</h1>
-      <span className="text-sm">
+      <span>
         Written by{' '}
         <Link href={`/${post.username}/`}>
-          <a className="text-info">@{post.username}</a>
+          <a>@{post.username}</a>
         </Link>{' '}
-        
       </span>
       <ReactMarkdown>{post?.content}</ReactMarkdown>
     </div>

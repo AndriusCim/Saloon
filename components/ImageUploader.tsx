@@ -1,14 +1,14 @@
+import { FilePicker, Spinner } from 'evergreen-ui';
 import React, { useState } from 'react';
-import { auth, storage, STATE_CHANGED } from '../lib/firebase';
-import Loader from './Loader';
+import { auth, storage, STATE_CHANGED } from '../api/firebase';
 
 const ImageUploader: React.FC = () => {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [downloadURL, setDownloadURL] = useState(null);
 
-  const uploadFile = async (e: React.FormEvent<HTMLInputElement>) => {
-    const file = Array.from(e.currentTarget.files)[0];
+  const uploadFile = async (fileList: FileList) => {
+    const file = Array.from(fileList)[0];
     const extension = file.type.split('/')[1];
     const ref = storage.ref(`uploads/${auth.currentUser.uid}/${Date.now()}.${extension}`);
     setUploading(true);
@@ -21,7 +21,7 @@ const ImageUploader: React.FC = () => {
     });
 
     task
-      .then((d) => ref.getDownloadURL())
+      .then(() => ref.getDownloadURL())
       .then((url) => {
         setDownloadURL(url);
         setUploading(false);
@@ -30,19 +30,23 @@ const ImageUploader: React.FC = () => {
 
   return (
     <div className="box">
-      <Loader show={uploading} />
-      {uploading && <h3>{progress}%</h3>}
-
-      {!uploading && (
+      {uploading && (
         <>
-          <label className="btn">
-            📸 Upload Img
-            <input type="file" onChange={uploadFile} accept="image/x-png,image/gif,image/jpeg" />
-          </label>
+          <Spinner />
+          <h3>{progress}%</h3>
         </>
       )}
 
-      {downloadURL && <code className="upload-snippet">{`![alt](${downloadURL})`}</code>}
+      {!uploading && (
+            <FilePicker
+              onChange={uploadFile}
+              accept="image/x-png,image/gif,image/jpeg"
+              width={350}
+              height={24}
+            />
+      )}
+
+      {downloadURL && <code>{`![alt](${downloadURL})`}</code>}
     </div>
   );
 };

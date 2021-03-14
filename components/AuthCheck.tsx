@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
+import { UserContext } from '../api/users';
 import Enter from '../pages/enter';
-import { UserContext } from '../lib/context';
 
 interface Props {
   fallback?: React.ReactNode;

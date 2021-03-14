@@ -1,30 +1,34 @@
+import React, { useState } from 'react';
+import { GetStaticProps } from 'next';
+import { Spinner } from 'evergreen-ui';
+
+import { mapPostDtoToModel, Post } from '../api/posts';
+import { firestore, fromMillis } from '../api/firebase';
 import PostFeed from '../components/PostFeed';
 import Metatags from '../components/Metatags';
-import Loader from '../components/Loader';
-import { firestore, fromMillis } from '../lib/firebase';
 
-import { useState } from 'react';
-import { postToJSON } from '../api/posts';
+interface Props {
+  posts: Post[];
+}
 
-// Max post to query per page
 const LIMIT = 10;
 
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetStaticProps = async () => {
   const postsQuery = firestore
     .collectionGroup('posts')
     .where('published', '==', true)
     .orderBy('createdAt', 'desc')
     .limit(LIMIT);
 
-  const posts = (await postsQuery.get()).docs.map(postToJSON);
+  const posts = (await postsQuery.get()).docs.map(mapPostDtoToModel);
 
   return {
-    props: { posts }, // will be passed to the page component as props
+    props: { posts }
   };
-}
+};
 
-export default function Home(props) {
-  const [posts, setPosts] = useState(props.posts);
+const Home: React.FC<Props> = ({ posts: props }) => {
+  const [posts, setPosts] = useState(props);
   const [loading, setLoading] = useState(false);
 
   const [postsEnd, setPostsEnd] = useState(false);
@@ -45,7 +49,7 @@ export default function Home(props) {
 
     const newPosts = (await query.get()).docs.map((doc) => doc.data());
 
-    setPosts(posts.concat(newPosts));
+    setPosts((prevState) => [...prevState, ...(newPosts as Post[])]);
     setLoading(false);
 
     if (newPosts.length < LIMIT) {
@@ -54,20 +58,20 @@ export default function Home(props) {
   };
 
   return (
-    <main className="bg-gray-800">
+    <main>
       <Metatags title="Home Page" description="Get the latest posts on our site" />
 
-      <div className="card card-info">
-        TODO: homepage
-      </div>
-     
+      <div>TODO: homepage</div>
+
       <PostFeed posts={posts} />
 
       {!loading && !postsEnd && <button onClick={getMorePosts}>Load more</button>}
 
-      <Loader show={loading} />
+      {loading && <Spinner />}
 
       {postsEnd && 'You have reached the end!'}
     </main>
   );
-}
+};
+
+export default Home;

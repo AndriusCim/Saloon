@@ -1,25 +1,25 @@
-import PostContent from '../../components/PostContent';
-import HeartButton from '../../components/HeartButton';
-import AuthCheck from '../../components/AuthCheck';
-import Metatags from '../../components/Metatags';
-import { UserContext } from '../../lib/context';
-import { firestore, getUserWithUsername } from '../../lib/firebase';
-
+import React, { useContext } from 'react';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import Link from 'next/link';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
-import { useContext } from 'react';
-import { Post, postToJSON } from '../../api/posts';
 
-export const getStaticProps = async ({ params }) => {
+import { Post, mapPostDtoToModel } from '../../api/posts';
+import { UserContext } from '../../api/users';
+import { firestore, getUserWithUsername } from '../../api/firebase';
+import AuthCheck from '../../components/AuthCheck';
+import HeartButton from '../../components/HeartButton';
+import Metatags from '../../components/Metatags';
+import PostContent from '../../components/PostContent';
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { username, slug } = params;
-  const userDoc = await getUserWithUsername(username);
-
+  const userDoc = await getUserWithUsername(username as string);
   let post;
   let path;
 
   if (userDoc) {
-    const postRef = userDoc.ref.collection('posts').doc(slug);
-    post = postToJSON(await postRef.get());
+    const postRef = userDoc.ref.collection('posts').doc(slug as string);
+    post = mapPostDtoToModel(await postRef.get());
 
     path = postRef.path;
   }
@@ -28,12 +28,10 @@ export const getStaticProps = async ({ params }) => {
     props: { post, path },
     revalidate: 100
   };
-}
+};
 
-export const getStaticPaths = async () => {
-  // Improve my using Admin SDK to select empty docs
+export const getStaticPaths: GetStaticPaths = async () => {
   const snapshot = await firestore.collectionGroup('posts').get();
-
   const paths = snapshot.docs.map((doc) => {
     const { slug, username } = doc.data();
     return {
@@ -42,21 +40,17 @@ export const getStaticPaths = async () => {
   });
 
   return {
-    // must be in this format:
-    // paths: [
-    //   { params: { username, slug }}
-    // ],
     paths,
     fallback: 'blocking'
   };
-}
+};
 
 interface Props {
   path: string;
   post: Post;
 }
 
-const Game: React.FC<Props> = (props) => {
+const SinglePost: React.FC<Props> = (props) => {
   const postRef = firestore.doc(props.path);
   const [realtimePost] = useDocumentData<Post>(postRef);
 
@@ -72,7 +66,7 @@ const Game: React.FC<Props> = (props) => {
         <PostContent post={post} />
       </section>
 
-      <aside className="card">
+      <aside>
         <p>
           <strong>{post.heartCount || 0} 🤍</strong>
         </p>
@@ -89,12 +83,12 @@ const Game: React.FC<Props> = (props) => {
 
         {currentUser?.uid === post.uid && (
           <Link href={`/admin/${post.slug}`}>
-            <button className="btn-blue">Edit Post</button>
+            <button>Edit Post</button>
           </Link>
         )}
       </aside>
     </main>
   );
-}
+};
 
-export default Game;
+export default SinglePost;

@@ -2,11 +2,10 @@ import React, { useContext } from 'react';
 import Router from 'next/router';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useForm, SubmitHandler } from 'react-hook-form';
-
 import { Button, FormField, Heading, Pane, Spinner, toaster, TextInput } from 'evergreen-ui';
 
-import { auth, firestore } from '../lib/firebase';
-import { UserContext } from '../lib/context';
+import { auth, firestore } from '../api/firebase';
+import { UserContext } from '../api/users';
 import Metatags from '../components/Metatags';
 
 interface SignInValues {
@@ -26,7 +25,7 @@ const Enter: React.FC = () => {
     handleSubmit: handleUsernameSubmit,
     errors: usernameErrors
   } = useForm<UsernameValues>();
-  const [_, loading] = useAuthState(auth);
+  const [, loading] = useAuthState(auth);
 
   const onSubmit: SubmitHandler<SignInValues> = async (data: SignInValues) => {
     await auth.signInWithEmailAndPassword(data.email, data.password).catch((e) => {

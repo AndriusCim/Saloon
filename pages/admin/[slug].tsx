@@ -7,16 +7,14 @@ import ReactMarkdown from 'react-markdown';
 import toast from 'react-hot-toast';
 
 import { Post } from '../../api/posts';
-import { firestore, auth, serverTimestamp, PostRef } from '../../lib/firebase';
+import { firestore, auth, serverTimestamp, PostRef } from '../../api/firebase';
 import ImageUploader from '../../components/ImageUploader';
 import AuthCheck from '../../components/AuthCheck';
 
 const PostManager = () => {
   const [preview, setPreview] = useState(false);
-
   const router = useRouter();
   const { slug } = router.query;
-
   const postRef = firestore
     .collection('users')
     .doc(auth.currentUser.uid)
@@ -39,7 +37,7 @@ const PostManager = () => {
             <h3>Tools</h3>
             <button onClick={() => setPreview(!preview)}>{preview ? 'Edit' : 'Preview'}</button>
             <Link href={`/${post.username}/${post.slug}`}>
-              <button className="btn-blue">Live view</button>
+              <button>Live view</button>
             </Link>
             <DeletePostButton postRef={postRef} />
           </aside>
@@ -69,7 +67,7 @@ function PostForm({ defaultValues, postRef, preview }) {
   return (
     <form onSubmit={handleSubmit(updatePost)}>
       {preview && (
-        <div className="card">
+        <div>
           <ReactMarkdown>{watch('content')}</ReactMarkdown>
         </div>
       )}
@@ -86,14 +84,14 @@ function PostForm({ defaultValues, postRef, preview }) {
           })}
         ></textarea>
 
-        {errors.content && <p className="text-danger">{errors.content.message}</p>}
+        {errors.content && <p>{errors.content.message}</p>}
 
         <fieldset>
           <input name="published" type="checkbox" ref={register} />
           <label>Published</label>
         </fieldset>
 
-        <button type="submit" className="btn-green" disabled={!isDirty || !isValid}>
+        <button type="submit" disabled={!isDirty || !isValid}>
           Save Changes
         </button>
       </div>
@@ -114,7 +112,7 @@ const DeletePostButton: React.FC<{ postRef: PostRef }> = ({ postRef }) => {
   };
 
   return (
-    <button className="btn-red" onClick={deletePost}>
+    <button onClick={deletePost}>
       Delete
     </button>
   );

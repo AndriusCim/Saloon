@@ -1,3 +1,4 @@
+import React from 'react';
 import { User } from '../api/posts';
 
 interface Props {
@@ -7,11 +8,10 @@ interface Props {
 const UserProfile: React.FC<Props> = ({ user }) => {
   return (
     <div className="box-center">
-      <img src={user.user.photoURL || '/hacker.png'} className="card-img-center" />
+      <img src="/hacker.png" />
       <p>
         <i>@{user.username}</i>
       </p>
-      <h1>{user.user.displayName || 'Anonymous User'}</h1>
     </div>
   );
 };

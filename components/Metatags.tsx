@@ -1,15 +1,16 @@
+import React from 'react';
 import Head from 'next/head';
 
 interface Props {
   title: string;
   description: string;
-  imageUrl?: string; 
+  imageUrl?: string;
 }
 
 const Metatags: React.FC<Props> = ({
-  title = 'The Full Next.js + Firebase Course',
-  description = 'A complete Next.js + Firebase course by Fireship.io',
-  imageUrl = 'https://fireship.io/courses/react-next-firebase/img/featured.png'
+  title = 'Saloon - place for friends by friends',
+  description = 'Born out of love for craft beer and quality code.',
+  imageUrl = 'https://images.newindianexpress.com/uploads/user/imagelibrary/2020/8/29/w1200X800/Post_tests-.jpg'
 }) => {
   return (
     <Head>
