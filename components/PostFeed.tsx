@@ -1,7 +1,10 @@
+import 'dayjs';
 import React from 'react';
 import Link from 'next/link';
-import { Pane, Avatar, Text } from 'evergreen-ui';
+import { Pane, Avatar, Text, Heading } from 'evergreen-ui';
 import { Post } from '../api/posts';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 interface Props {
   admin?: boolean;
@@ -14,26 +17,38 @@ interface PostItem {
 }
 
 const PostItem: React.FC<PostItem> = ({ post, admin = false }) => {
-  return (
-    <Pane padding={20} display="flex" border="muted" alignItems="center">
-      <Avatar hashValue={post.uid} name=" " size={40} />
+  const date = new Date(post.createdAt);
+  dayjs.extend(relativeTime);
 
+  return (
+    <Pane
+      marginTop={12}
+      elevation={1}
+      width="60%"
+      minWidth={400}
+      padding={10}
+      display="flex"
+      border="muted"
+      alignItems="center"
+    >
+      <Avatar hashValue={post.uid} name=" " size={40} />
       <Text marginX={20}>👍 {post.heartCount || 0} Hearts</Text>
 
-      <Pane></Pane>
-      <Link href={`/${post.username}/${post.slug}`}>
-        <h4>
-          <a>{post.title}</a>
-        </h4>
-      </Link>
-
-      <footer>
-        <Link href={`/${post.username}`}>
-          <a>
-            <strong>By @{post.username}</strong>
-          </a>
+      <Pane>
+        <Link href={`/${post.username}/${post.slug}`}>
+          <Heading>
+            <a>{post.title}</a>
+          </Heading>
         </Link>
-      </footer>
+
+        <Text>{dayjs(date).fromNow()} • From {' '}</Text>
+
+        <Link href={`/${post.username}`}>
+          <Text cursor="pointer">
+            <strong>@{post.username}</strong>
+          </Text>
+        </Link>
+      </Pane>
 
       {admin && (
         <>
@@ -52,7 +67,7 @@ const PostItem: React.FC<PostItem> = ({ post, admin = false }) => {
 
 const PostFeed: React.FC<Props> = ({ posts, admin }) => {
   return posts ? (
-    <Pane display="flex" justifyContent="center">
+    <Pane flexDirection="column" display="flex" alignItems="center">
       {posts.map((post) => (
         <PostItem post={post} key={post.slug} admin={admin} />
       ))}

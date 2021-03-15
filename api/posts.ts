@@ -1,5 +1,21 @@
 import { Timestamp, Document } from './firebase';
 
+export interface Comment {
+  content: string;
+  createdAt: number;
+  createdBy: string;
+}
+
+export interface CommentDto {
+  content: string;
+  createdAt: Timestamp;
+  createdBy: string;
+}
+
+export interface CommentDocDto {
+  data: CommentDto;
+}
+
 export interface Post {
   content: string;
   createdAt: number;
@@ -31,4 +47,26 @@ export const mapPostDtoToModel = (doc: Document): Post => {
     createdAt: data?.createdAt.toMillis() || 0,
     updatedAt: data?.updatedAt.toMillis() || 0
   };
+};
+
+export const mapCommentDtoToModel = (doc: Document): Comment => {
+  const data = doc.data().data;
+  
+  const comments: Comment = {
+    ...data,
+    createdAt: data?.createdAt.toMillis() || 0
+  };
+
+  return comments;
+};
+
+export const mapCommentDocDtoToModel = (doc: CommentDto): Comment => {
+  const data = doc
+
+  const comments: Comment = {
+    ...data,
+    createdAt: data?.createdAt?.toMillis() || 0
+  };
+
+  return comments;
 };
