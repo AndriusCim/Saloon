@@ -24,7 +24,7 @@ const PostItem: React.FC<Props> = ({ post, admin }) => {
         marginTop={15}
         elevation={2}
         width="60%"
-        minWidth={400}
+        minWidth={300}
         padding={10}
         display="flex"
         border="muted"
