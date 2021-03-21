@@ -56,7 +56,6 @@ const CommentFeed: React.FC<Props> = ({ comments, postRef }) => {
             placeholder="Enter comment"
           />
         </FormField>
-
         <FormField marginTop="10">
           <Button type="submit" appearance="primary" intent="success">
             Submit
