@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Link from 'next/link';
 import { useDocumentData, useCollectionData } from 'react-firebase-hooks/firestore';
+import { Pane } from 'evergreen-ui';
 
 import {
   Post,
@@ -13,7 +14,6 @@ import {
 } from '../../api/posts';
 import { UserContext } from '../../api/users';
 import { firestore, getUserWithUsername } from '../../api/firebase';
-import AuthCheck from '../../components/AuthCheck';
 import HeartButton from '../../components/HeartButton';
 import Metatags from '../../components/Metatags';
 import PostContent from '../../components/PostContent';
@@ -29,7 +29,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   if (userDoc) {
     const postRef = userDoc.ref.collection('posts').doc(slug as string);
-    const commentList = (await postRef.collection('comments').get()).docs.map(mapCommentDtoToModel);
+    const postsQuery = firestore.collectionGroup('comments').orderBy('createdAt', 'desc');
+
+    const commentList = (await postsQuery.get()).docs.map(mapCommentDtoToModel);
     post = mapPostDtoToModel(await postRef.get());
     path = postRef.path;
     comments = commentList;
@@ -72,27 +74,14 @@ const SinglePost: React.FC<Props> = (props) => {
   const post = realtimePost || props.post;
 
   return (
-    <main>
+    <Pane display="flex" justifyContent="center">
       <Metatags title={post.title} description={post.title} />
-
-      <section>
+      <Pane width="60%" minWidth={400} flexDirection="column" display="flex" alignItems="center">
         <PostContent post={post} />
-      </section>
 
-      <aside>
-        <p>
-          <strong>{post.heartCount || 0} 🤍</strong>
-        </p>
-
-        <AuthCheck
-          fallback={
-            <Link href="/enter">
-              <button>💗 Sign Up</button>
-            </Link>
-          }
-        >
+        <Pane alignSelf="flex-start" marginY={10}>
           <HeartButton postRef={postRef} />
-        </AuthCheck>
+        </Pane>
 
         <CommentFeed comments={comments} postRef={postRef} />
 
@@ -101,8 +90,8 @@ const SinglePost: React.FC<Props> = (props) => {
             <button>Edit Post</button>
           </Link>
         )}
-      </aside>
-    </main>
+      </Pane>
+    </Pane>
   );
 };
 
