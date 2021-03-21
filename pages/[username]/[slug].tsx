@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
-import Link from 'next/link';
 import { useDocumentData, useCollectionData } from 'react-firebase-hooks/firestore';
 import { Pane } from 'evergreen-ui';
 
@@ -77,19 +76,13 @@ const SinglePost: React.FC<Props> = (props) => {
     <Pane display="flex" justifyContent="center">
       <Metatags title={post.title} description={post.title} />
       <Pane width="60%" minWidth={400} flexDirection="column" display="flex" alignItems="center">
-        <PostContent post={post} />
+        <PostContent isOwn={currentUser?.uid === post.uid} post={post} />
 
         <Pane alignSelf="flex-start" marginY={10}>
           <HeartButton postRef={postRef} />
         </Pane>
 
         <CommentFeed comments={comments} postRef={postRef} />
-
-        {currentUser?.uid === post.uid && (
-          <Link href={`/admin/${post.slug}`}>
-            <button>Edit Post</button>
-          </Link>
-        )}
       </Pane>
     </Pane>
   );

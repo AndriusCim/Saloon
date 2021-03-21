@@ -44,7 +44,11 @@ const CommentFeed: React.FC<Props> = ({ comments, postRef }) => {
             isInvalid={errors && !!errors.comment}
             name="comment"
             ref={register({
-              required: 'Enter your comment'
+              required: 'Enter your comment',
+              maxLength: {
+                value: 150,
+                message: "Too long"
+              }
             })}
             placeholder="Enter comment"
           />

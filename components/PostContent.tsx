@@ -2,13 +2,14 @@ import React from 'react';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import { Post } from '../api/posts';
-import { Heading, Pane, Text, Strong, Badge } from 'evergreen-ui';
+import { Heading, Pane, Text, Strong, Badge, Button } from 'evergreen-ui';
 
 interface Props {
   post: Post;
+  isOwn: boolean;
 }
 
-const PostContent: React.FC<Props> = ({ post }) => {
+const PostContent: React.FC<Props> = ({ post, isOwn }) => {
   return (
     <Pane marginTop={12} elevation={1} width="100%" padding={20} display="flex" border="muted" alignItems="center">
       <div>
@@ -28,6 +29,14 @@ const PostContent: React.FC<Props> = ({ post }) => {
         <Text>
           <ReactMarkdown>{post?.content}</ReactMarkdown>
         </Text>
+
+        {isOwn && (
+          <Link href={`/admin/${post.slug}`}>
+            <Button marginRight={16} appearance="primary" intent="warning">
+              Edit post
+            </Button>
+          </Link>
+        )}
       </div>
     </Pane>
   );

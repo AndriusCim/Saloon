@@ -9,7 +9,7 @@ interface Props {
   loading: boolean;
   postsEnd: boolean;
   posts: Post[];
-  onLoadMore: () => Promise<void>;
+  onLoadMore?: () => Promise<void>;
 }
 
 const PostFeed: React.FC<Props> = ({ posts, loading, postsEnd, admin, onLoadMore }) => {

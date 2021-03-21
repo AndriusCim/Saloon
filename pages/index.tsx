@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { GetStaticProps } from 'next';
-import { Spinner, Button } from 'evergreen-ui';
 
 import { mapPostDtoToModel, Post } from '../api/posts';
 import { firestore, fromMillis } from '../api/firebase';

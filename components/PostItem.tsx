@@ -3,7 +3,7 @@ import 'dayjs';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Pane, Avatar, Text, Heading, Strong } from 'evergreen-ui';
+import { Pane, Avatar, Text, Heading, Strong, Button } from 'evergreen-ui';
 
 import { Post } from '../api/posts';
 
@@ -45,19 +45,17 @@ const PostItem: React.FC<Props> = ({ post, admin }) => {
               <strong>@{post.username}</strong>
             </Text>
           </Link>
-        </Pane>
 
-        {admin && (
-          <>
+          {admin && (
             <Link href={`/admin/${post.slug}`}>
-              <h3>
-                <button>Edit</button>
-              </h3>
+              <Button marginLeft={16} intent="warning">
+                Edit
+              </Button>
             </Link>
+          )}
 
-            {post.published ? <p>Live</p> : <p>Unpublished</p>}
-          </>
-        )}
+          {admin && <Text> • {post.published ? 'Live' : 'Unpublished'} </Text>}
+        </Pane>
       </Pane>
     </Link>
   );
