@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { GetStaticProps } from 'next';
-import { Spinner } from 'evergreen-ui';
 
 import { mapPostDtoToModel, Post } from '../api/posts';
 import { firestore, fromMillis } from '../api/firebase';
@@ -60,16 +59,7 @@ const Home: React.FC<Props> = ({ posts: props }) => {
   return (
     <main>
       <Metatags title="Home Page" description="Get the latest posts on our site" />
-
-      <div>TODO: homepage</div>
-
-      <PostFeed posts={posts} />
-
-      {!loading && !postsEnd && <button onClick={getMorePosts}>Load more</button>}
-
-      {loading && <Spinner />}
-
-      {postsEnd && 'You have reached the end!'}
+      <PostFeed posts={posts} loading={loading} postsEnd={postsEnd} onLoadMore={getMorePosts} />
     </main>
   );
 };

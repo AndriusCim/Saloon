@@ -10,6 +10,7 @@ import { Post } from '../../api/posts';
 import { firestore, auth, serverTimestamp, PostRef } from '../../api/firebase';
 import ImageUploader from '../../components/ImageUploader';
 import AuthCheck from '../../components/AuthCheck';
+import { Textarea } from 'evergreen-ui';
 
 const PostManager = () => {
   const [preview, setPreview] = useState(false);
@@ -75,14 +76,14 @@ function PostForm({ defaultValues, postRef, preview }) {
       <div>
         <ImageUploader />
 
-        <textarea
+        <Textarea
           name="content"
           ref={register({
             maxLength: { value: 20000, message: 'content is too long' },
             minLength: { value: 10, message: 'content is too short' },
             required: { value: true, message: 'content is required' }
           })}
-        ></textarea>
+        ></Textarea>
 
         {errors.content && <p>{errors.content.message}</p>}
 

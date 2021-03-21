@@ -31,9 +31,9 @@ const Heart: React.FC<Props> = ({ postRef }) => {
   };
 
   return (
-    <Button onClick={heartDoc?.exists ? removeHeart : addHeart} appearance="minimal" height={24}>
+    <Button onClick={heartDoc?.exists ? removeHeart : addHeart} appearance="primary" intent="none">
       {' '}
-      {heartDoc?.exists ? '👍' : '👎'}{' '}
+      {heartDoc?.exists ? '👎' : '👍'}{' '}
     </Button>
   );
 };
