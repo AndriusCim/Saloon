@@ -17,7 +17,7 @@ interface SignInValues {
 }
 
 const CommentFeed: React.FC<Props> = ({ comments, postRef }) => {
-  const { register, handleSubmit, errors } = useForm<SignInValues>();
+  const { register, handleSubmit, errors, reset } = useForm<SignInValues>();
   const { username } = useContext(UserContext);
 
   const onSubmit: SubmitHandler<SignInValues> = async (data: SignInValues) => {
@@ -31,13 +31,16 @@ const CommentFeed: React.FC<Props> = ({ comments, postRef }) => {
       .catch((e) => {
         toaster.danger(e.message);
       });
+    reset();
   };
 
   return (
     <Pane width="100%">
-      {comments.sort((a, b) => b.createdAt - a.createdAt).map((x, i) => (
-        <SingleComment key={i} comment={x} />
-      ))}
+      {comments
+        .sort((a, b) => b.createdAt - a.createdAt)
+        .map((x, i) => (
+          <SingleComment key={i} comment={x} />
+        ))}
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormField validationMessage={errors && errors.comment?.message} marginTop={20}>
           <Textarea
@@ -47,7 +50,7 @@ const CommentFeed: React.FC<Props> = ({ comments, postRef }) => {
               required: 'Enter your comment',
               maxLength: {
                 value: 150,
-                message: "Too long"
+                message: 'Too long'
               }
             })}
             placeholder="Enter comment"
