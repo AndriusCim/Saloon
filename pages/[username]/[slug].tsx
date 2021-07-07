@@ -75,7 +75,7 @@ const SinglePost: React.FC<Props> = (props) => {
   return (
     <Pane display="flex" justifyContent="center">
       <Metatags title={post.title} description={post.title} />
-      <Pane width="60%" minWidth={400} flexDirection="column" display="flex" alignItems="center">
+      <Pane width="60%" minWidth={300} flexDirection="column" display="flex" alignItems="center">
         <PostContent isOwn={currentUser?.uid === post.uid} post={post} />
 
         <Pane alignSelf="flex-start" marginY={10}>

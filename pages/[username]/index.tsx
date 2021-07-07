@@ -46,9 +46,7 @@ const UserProfilePage: React.FC<Props> = ({ user, posts }) => {
   return (
     <main>
       <Metatags title={user.username} description={`${user.username}'s public profile`} />
-
       <UserProfile user={user} />
-      
       <PostFeed loading={false} postsEnd={true} admin={false} posts={posts} />
     </main>
   );
